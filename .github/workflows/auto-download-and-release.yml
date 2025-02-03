@@ -1,0 +1,32 @@
+name: 'Auto Download and Release'
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+      - name: 'Prepare'
+        run: |
+          git clone https://github.com/Axoloteera/HoYoverseStickers.git
+          cd HoYoverseStickers
+          pip3 install -r requirements.txt
+      - name: 'Download And Zip'
+        run: |
+          python3 main.py --zipped
+      - name: 'Get Current Time'
+        id: get_current_time
+        run: |
+          echo echo "::set-output name=date::$(date +'%Y-%m-%d-%H-%M-%S')"
+      - name: 'Release'
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: output.zip
+          name: 'Release-${{ steps.get_current_time.outputs.date }}'
+      
