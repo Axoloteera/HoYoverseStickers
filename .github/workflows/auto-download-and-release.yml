@@ -22,13 +22,13 @@ jobs:
       - name: 'Get Current Time'
         id: get_current_time
         run: |
-          echo echo "::set-output name=date::$(date +'%Y-%m-%d-%H-%M-%S')"
+          echo "::set-output name=date::$(date +'%Y-%m-%d-%H-%M-%S')"
       - name: 'Release'
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: output.zip
-          name: 'Release-${{ steps.get_current_time.outputs.date }}'
-          tag_name: 'Release-${{ steps.get_current_time.outputs.date }}'
+          name: '${{ steps.get_current_time.outputs.date }}'
+          tag_name: '${{ steps.get_current_time.outputs.date }}'
       
