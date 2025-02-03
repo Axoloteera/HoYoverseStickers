@@ -30,4 +30,5 @@ jobs:
         with:
           files: output.zip
           name: 'Release-${{ steps.get_current_time.outputs.date }}'
+          tag_name: 'Release-${{ steps.get_current_time.outputs.date }}'
       
