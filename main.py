@@ -56,7 +56,7 @@ def download_game_stickers(game: str, sub_dir: str = None) -> None:
                 game_data[game]["url"]
             )
         )
-    for url in image_urls[:1]:
+    for url in image_urls:
         download_image(url, f"{sub_dir}/{url.split('/')[-1].replace(r'%27', '_')}")
 
 def export_as_zipfile(sub_dirs: list[str] = None) -> None:

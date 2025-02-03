@@ -1,4 +1,4 @@
-name: 'Auto Download and Release'
+name: Auto Download and Release
 
 on:
   workflow_dispatch:
@@ -9,26 +9,22 @@ jobs:
   download:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout'
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: 'Prepare'
+      - name: Prepare
         run: |
           git clone https://github.com/Axoloteera/HoYoverseStickers.git
           cd HoYoverseStickers
           pip3 install -r requirements.txt
-      - name: 'Download And Zip'
+      - name: Download And Zip
         run: |
           python3 main.py --zipped
-      - name: 'Get Current Time'
-        id: get_current_time
-        run: |
-          echo "::set-output name=date::$(date +'%Y-%m-%d-%H-%M-%S')"
-      - name: 'Release'
+      - name: Release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: output.zip
-          name: '${{ steps.get_current_time.outputs.date }}'
-          tag_name: '${{ steps.get_current_time.outputs.date }}'
+          name: ${{ github.run_id }}-${{ github.run_number }}
+          tag_name: release-${{ github.run_id }}
       
