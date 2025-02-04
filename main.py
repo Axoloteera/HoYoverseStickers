@@ -38,9 +38,9 @@ def download_image(url: str, path: str) -> None:
         f.write(session.get(url).content)
 
 def download_game_stickers(game: str, sub_dir: str = None) -> None:
-    os.makedirs(game_data[game]["name"], exist_ok=True)
-    image_urls: list[str] = get_image_urls(get_html(game_data[game]["url"]))
     sub_dir: str = sub_dir or game_data[game]["name"]
+    os.makedirs(sub_dir, exist_ok=True)
+    image_urls: list[str] = get_image_urls(get_html(game_data[game]["url"]))
     with open(f"{sub_dir}/urls.txt", "w") as f:
         f.write("\n".join(image_urls))
     with open(f"{sub_dir}/paths.txt", "w") as f:

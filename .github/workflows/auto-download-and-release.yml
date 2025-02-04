@@ -25,6 +25,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: output.zip
-          name: ${{ github.run_id }}-${{ github.run_number }}
+          name: release-${{ github.run_id }}
           tag_name: release-${{ github.run_id }}
       
