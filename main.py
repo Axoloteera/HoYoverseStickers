@@ -1,3 +1,5 @@
+from argparse import ArgumentParser
+
 import requests
 from bs4 import BeautifulSoup
 import os
@@ -46,7 +48,9 @@ def download_game_stickers(game: str, sub_dir: str = None) -> None:
     with open(f"{sub_dir}/paths.txt", "w") as f:
         f.write(
             "\n".join(
-                f"{sub_dir}/{url.split('/')[-1].replace(r'%27', '_')}"
+                # Danheng's stickers have special characters in their names
+                # And "Paimon's Paintings" -> "Paimon_s_Paintings"
+                f"{sub_dir}/{url.split('/')[-1].replace(r'%27', '_').replace(r'%E2%80%A2', '.')}"
                 for url in image_urls
             )
         )
@@ -57,18 +61,18 @@ def download_game_stickers(game: str, sub_dir: str = None) -> None:
             )
         )
     for url in image_urls:
-        download_image(url, f"{sub_dir}/{url.split('/')[-1].replace(r'%27', '_')}")
+        download_image(url, f"{sub_dir}/{url.split('/')[-1].replace(r'%27', '_').replace(r'%E2%80%A2', '.')}")
 
 def export_as_zipfile(sub_dirs: list[str] = None) -> None:
     with zipfile.ZipFile("output.zip", "w") as z:
         for sub_dir in sub_dirs:
             for file in os.listdir(sub_dir):
-                z.write(f"{sub_dir}/{file}", f"{sub_dir}/{file.replace(r'%27', '_')}")
+                z.write(f"{sub_dir}/{file}", f"{sub_dir}/{file.replace(r'%27', '_').replace(r'%E2%80%A2', '.')}")
 
 if __name__ == "__main__":
     import argparse
 
-    arg_parser = argparse.ArgumentParser()
+    arg_parser: ArgumentParser = argparse.ArgumentParser()
     arg_parser.add_argument("--zipped", default=False, action="store_true", help="Save as a zip file")
     arg_parser.add_argument("--games", 
                             type=str, 
